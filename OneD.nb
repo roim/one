@@ -1,0 +1,1156 @@
+(* Content-type: application/vnd.wolfram.mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Mathematica 8.0' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       157,          7]
+NotebookDataLength[     37902,       1147]
+NotebookOptionsPosition[     37315,       1124]
+NotebookOutlinePosition[     37659,       1139]
+CellTagsIndexPosition[     37616,       1136]
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+Cell[TextData[StyleBox["One, Metallica", "Subtitle"]], "Text",
+ CellChangeTimes->{{3.547688036603247*^9, 3.547688063400744*^9}, {
+   3.5476881363740025`*^9, 3.5476881483076673`*^9}, {3.5476883234541054`*^9, 
+   3.547688324153714*^9}, {3.547688377275163*^9, 3.5476883783567944`*^9}, 
+   3.5502905370273037`*^9}],
+
+Cell[TextData[StyleBox["rodrigo roim", "Subsubtitle"]], "Text",
+ CellChangeTimes->{{3.547688397614153*^9, 3.5476884025261707`*^9}, {
+  3.550290539681389*^9, 3.5502905499367123`*^9}}],
+
+Cell["Limpando variaveis", "Text",
+ CellChangeTimes->{{3.547688021118539*^9, 3.547688053780781*^9}}],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"Off", "[", 
+   RowBox[{"Remove", "::", "\"\<rmnsm\>\""}], "]"}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"Off", "[", 
+   RowBox[{"General", "::", "\"\<spell1\>\""}], "]"}], ";"}], "\n", 
+ RowBox[{
+  RowBox[{"Off", "[", 
+   RowBox[{"General", "::", "\"\<spell\>\""}], "]"}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"Off", "[", 
+   RowBox[{"Solve", "::", "\"\<ifun\>\""}], "]"}], ";"}]}], "Input",
+ CellChangeTimes->{{3.5476856246495657`*^9, 3.5476856323081317`*^9}, 
+   3.547685707482815*^9, {3.5476883991638107`*^9, 3.547688399888852*^9}}],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"Remove", "[", "\"\<`*\>\"", "]"}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"$Line", "=", "0"}], ";"}]}], "Input",
+ CellChangeTimes->{{3.5476880498724194`*^9, 3.547688050864476*^9}}],
+
+Cell[CellGroupData[{
+
+Cell["\<\
+
+Tocamos cada nota como uma serie de fourier (aproximada ate o decimo termo).
+Para diminuir a intensidade dos termos de ordem superior, assumimos an = \
+1/Sqrt[n]
+Para diminuir a intensidade de cada nota ao longo do tempo, multiplicamos a \
+nota por 1/(t-t0) e por Sigmoid[-(t-t0)/2]
+Por fim, podemos comecar uma nota no tempo t0 se multiplicarmos sua \
+contribuicao pela funcao de Heaviside em (t-t0)
+
+Abaixo, cada linha corresponde a contribuicao de uma nota (as frequencias sao \
+os inteiros dentro do Sin[ ]).
+\
+\>", "Subsubtitle",
+ CellChangeTimes->{{3.547688188107772*^9, 3.5476883705695043`*^9}, {
+  3.5476887402552*^9, 3.5476887512683563`*^9}, {3.5476908867655735`*^9, 
+  3.547690889391723*^9}, {3.547824871786297*^9, 3.5478248726257377`*^9}, {
+  3.547825095176566*^9, 3.5478251077969885`*^9}}],
+
+Cell[BoxData[
+ RowBox[{"Play", "[", 
+  RowBox[{
+   RowBox[{
+    RowBox[{
+     RowBox[{"1", "/", "t"}], "*", 
+     RowBox[{"(", 
+      RowBox[{"1", "/", 
+       RowBox[{"(", 
+        RowBox[{"1", "+", 
+         RowBox[{"Exp", "[", 
+          RowBox[{"t", "/", "2"}], "]"}]}], ")"}]}], ")"}], "*", 
+     RowBox[{"Sum", "[", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"1", "/", 
+         RowBox[{"n", "^", 
+          RowBox[{"(", 
+           RowBox[{"1", "/", "2"}], ")"}]}]}], "*", 
+        RowBox[{"Sin", "[", 
+         RowBox[{"2", "*", "Pi", "*", "246.94", "*", "t", "*", "n"}], "]"}]}],
+        ",", 
+       RowBox[{"{", 
+        RowBox[{"n", ",", "1", ",", "10"}], "}"}]}], "]"}]}], "+", 
+    RowBox[{
+     RowBox[{"UnitStep", "[", 
+      RowBox[{"t", "-", "0.4"}], "]"}], "*", 
+     RowBox[{"1", "/", 
+      RowBox[{"If", "[", 
+       RowBox[{
+        RowBox[{"t", ">", "0.401"}], ",", 
+        RowBox[{"t", "-", "0.4"}], ",", "1"}], "]"}]}], "*", 
+     RowBox[{"(", 
+      RowBox[{"1", "/", 
+       RowBox[{"(", 
+        RowBox[{"1", "+", 
+         RowBox[{"Exp", "[", 
+          RowBox[{
+           RowBox[{"(", 
+            RowBox[{"t", "-", "0.4"}], ")"}], "/", "2"}], "]"}]}], ")"}]}], 
+      ")"}], "*", 
+     RowBox[{"Sum", "[", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"1", "/", 
+         RowBox[{"n", "^", 
+          RowBox[{"(", 
+           RowBox[{"1", "/", "2"}], ")"}]}]}], "*", 
+        RowBox[{"Sin", "[", 
+         RowBox[{"2", "*", "Pi", "*", "369.99", "*", 
+          RowBox[{"(", 
+           RowBox[{"t", "-", "0.4"}], ")"}], "*", "n"}], "]"}]}], ",", 
+       RowBox[{"{", 
+        RowBox[{"n", ",", "1", ",", "7"}], "}"}]}], "]"}]}], "+", 
+    RowBox[{
+     RowBox[{"UnitStep", "[", 
+      RowBox[{"t", "-", "0.8"}], "]"}], "*", 
+     RowBox[{"1", "/", 
+      RowBox[{"If", "[", 
+       RowBox[{
+        RowBox[{"t", ">", "0.801"}], ",", 
+        RowBox[{"t", "-", "0.8"}], ",", "1"}], "]"}]}], "*", 
+     RowBox[{"(", 
+      RowBox[{"1", "/", 
+       RowBox[{"(", 
+        RowBox[{"1", "+", 
+         RowBox[{"Exp", "[", 
+          RowBox[{
+           RowBox[{"(", 
+            RowBox[{"t", "-", "0.8"}], ")"}], "/", "2"}], "]"}]}], ")"}]}], 
+      ")"}], "*", 
+     RowBox[{"Sum", "[", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"1", "/", 
+         RowBox[{"n", "^", 
+          RowBox[{"(", 
+           RowBox[{"1", "/", "2"}], ")"}]}]}], "*", 
+        RowBox[{"Sin", "[", 
+         RowBox[{"2", "*", "Pi", "*", "246.94", "*", 
+          RowBox[{"(", 
+           RowBox[{"t", "-", "0.8"}], ")"}], "*", "n"}], "]"}]}], ",", 
+       RowBox[{"{", 
+        RowBox[{"n", ",", "1", ",", "7"}], "}"}]}], "]"}]}], "+", 
+    RowBox[{
+     RowBox[{"UnitStep", "[", 
+      RowBox[{"t", "-", "1.2"}], "]"}], "*", 
+     RowBox[{"1", "/", 
+      RowBox[{"If", "[", 
+       RowBox[{
+        RowBox[{"t", ">", "1.201"}], ",", 
+        RowBox[{"t", "-", "1.2"}], ",", "1"}], "]"}]}], "*", 
+     RowBox[{"(", 
+      RowBox[{"1", "/", 
+       RowBox[{"(", 
+        RowBox[{"1", "+", 
+         RowBox[{"Exp", "[", 
+          RowBox[{
+           RowBox[{"(", 
+            RowBox[{"t", "-", "1.2"}], ")"}], "/", "2"}], "]"}]}], ")"}]}], 
+      ")"}], "*", 
+     RowBox[{"Sum", "[", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"1", "/", 
+         RowBox[{"n", "^", 
+          RowBox[{"(", 
+           RowBox[{"1", "/", "2"}], ")"}]}]}], "*", 
+        RowBox[{"Sin", "[", 
+         RowBox[{"2", "*", "Pi", "*", "293.66", "*", 
+          RowBox[{"(", 
+           RowBox[{"t", "-", "1.2"}], ")"}], "*", "n"}], "]"}]}], ",", 
+       RowBox[{"{", 
+        RowBox[{"n", ",", "1", ",", "7"}], "}"}]}], "]"}]}], "+", 
+    RowBox[{
+     RowBox[{"UnitStep", "[", 
+      RowBox[{"t", "-", "2.4"}], "]"}], "*", 
+     RowBox[{"1", "/", 
+      RowBox[{"If", "[", 
+       RowBox[{
+        RowBox[{"t", ">", "2.401"}], ",", 
+        RowBox[{"t", "-", "2.4"}], ",", "1"}], "]"}]}], "*", 
+     RowBox[{"(", 
+      RowBox[{"1", "/", 
+       RowBox[{"(", 
+        RowBox[{"1", "+", 
+         RowBox[{"Exp", "[", 
+          RowBox[{
+           RowBox[{"(", 
+            RowBox[{"t", "-", "2.4"}], ")"}], "/", "2"}], "]"}]}], ")"}]}], 
+      ")"}], "*", 
+     RowBox[{"Sum", "[", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"1", "/", 
+         RowBox[{"n", "^", 
+          RowBox[{"(", 
+           RowBox[{"1", "/", "2"}], ")"}]}]}], "*", 
+        RowBox[{"Sin", "[", 
+         RowBox[{"2", "*", "Pi", "*", "196.00", "*", 
+          RowBox[{"(", 
+           RowBox[{"t", "-", "2.4"}], ")"}], "*", "n"}], "]"}]}], ",", 
+       RowBox[{"{", 
+        RowBox[{"n", ",", "1", ",", "7"}], "}"}]}], "]"}]}], "+", 
+    RowBox[{
+     RowBox[{"UnitStep", "[", 
+      RowBox[{"t", "-", "2.8"}], "]"}], "*", 
+     RowBox[{"1", "/", 
+      RowBox[{"If", "[", 
+       RowBox[{
+        RowBox[{"t", ">", "2.801"}], ",", 
+        RowBox[{"t", "-", "2.8"}], ",", "1"}], "]"}]}], "*", 
+     RowBox[{"(", 
+      RowBox[{"1", "/", 
+       RowBox[{"(", 
+        RowBox[{"1", "+", 
+         RowBox[{"Exp", "[", 
+          RowBox[{
+           RowBox[{"(", 
+            RowBox[{"t", "-", "2.8"}], ")"}], "/", "2"}], "]"}]}], ")"}]}], 
+      ")"}], "*", 
+     RowBox[{"Sum", "[", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"1", "/", 
+         RowBox[{"n", "^", 
+          RowBox[{"(", 
+           RowBox[{"1", "/", "2"}], ")"}]}]}], "*", 
+        RowBox[{"Sin", "[", 
+         RowBox[{"2", "*", "Pi", "*", "369.99", "*", 
+          RowBox[{"(", 
+           RowBox[{"t", "-", "2.8"}], ")"}], "*", "n"}], "]"}]}], ",", 
+       RowBox[{"{", 
+        RowBox[{"n", ",", "1", ",", "7"}], "}"}]}], "]"}]}], "+", 
+    RowBox[{
+     RowBox[{"UnitStep", "[", 
+      RowBox[{"t", "-", "3.2"}], "]"}], "*", 
+     RowBox[{"1", "/", 
+      RowBox[{"If", "[", 
+       RowBox[{
+        RowBox[{"t", ">", "3.201"}], ",", 
+        RowBox[{"t", "-", "3.2"}], ",", "1"}], "]"}]}], "*", 
+     RowBox[{"(", 
+      RowBox[{"1", "/", 
+       RowBox[{"(", 
+        RowBox[{"1", "+", 
+         RowBox[{"Exp", "[", 
+          RowBox[{
+           RowBox[{"(", 
+            RowBox[{"t", "-", "3.2"}], ")"}], "/", "2"}], "]"}]}], ")"}]}], 
+      ")"}], "*", 
+     RowBox[{"Sum", "[", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"1", "/", 
+         RowBox[{"n", "^", 
+          RowBox[{"(", 
+           RowBox[{"1", "/", "2"}], ")"}]}]}], "*", 
+        RowBox[{"Sin", "[", 
+         RowBox[{"2", "*", "Pi", "*", "196.00", "*", 
+          RowBox[{"(", 
+           RowBox[{"t", "-", "3.2"}], ")"}], "*", "n"}], "]"}]}], ",", 
+       RowBox[{"{", 
+        RowBox[{"n", ",", "1", ",", "7"}], "}"}]}], "]"}]}], "+", 
+    RowBox[{
+     RowBox[{"UnitStep", "[", 
+      RowBox[{"t", "-", "3.6"}], "]"}], "*", 
+     RowBox[{"1", "/", 
+      RowBox[{"If", "[", 
+       RowBox[{
+        RowBox[{"t", ">", "3.601"}], ",", 
+        RowBox[{"t", "-", "3.6"}], ",", "1"}], "]"}]}], "*", 
+     RowBox[{"(", 
+      RowBox[{"1", "/", 
+       RowBox[{"(", 
+        RowBox[{"1", "+", 
+         RowBox[{"Exp", "[", 
+          RowBox[{
+           RowBox[{"(", 
+            RowBox[{"t", "-", "3.6"}], ")"}], "/", "7"}], "]"}]}], ")"}]}], 
+      ")"}], "*", 
+     RowBox[{"Sum", "[", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"1", "/", 
+         RowBox[{"n", "^", 
+          RowBox[{"(", 
+           RowBox[{"1", "/", "2"}], ")"}]}]}], "*", 
+        RowBox[{"Sin", "[", 
+         RowBox[{"2", "*", "Pi", "*", "293.66", "*", 
+          RowBox[{"(", 
+           RowBox[{"t", "-", "3.6"}], ")"}], "*", "n"}], "]"}]}], ",", 
+       RowBox[{"{", 
+        RowBox[{"n", ",", "1", ",", "7"}], "}"}]}], "]"}]}], "+", 
+    RowBox[{
+     RowBox[{"UnitStep", "[", 
+      RowBox[{"t", "-", "4.8"}], "]"}], "*", 
+     RowBox[{"1", "/", 
+      RowBox[{"If", "[", 
+       RowBox[{
+        RowBox[{"t", ">", "4.801"}], ",", 
+        RowBox[{"t", "-", "4.8"}], ",", "1"}], "]"}]}], "*", 
+     RowBox[{"(", 
+      RowBox[{"1", "/", 
+       RowBox[{"(", 
+        RowBox[{"1", "+", 
+         RowBox[{"Exp", "[", 
+          RowBox[{
+           RowBox[{"(", 
+            RowBox[{"t", "-", "4.8"}], ")"}], "/", "2"}], "]"}]}], ")"}]}], 
+      ")"}], "*", 
+     RowBox[{"Sum", "[", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"1", "/", 
+         RowBox[{"n", "^", 
+          RowBox[{"(", 
+           RowBox[{"1", "/", "2"}], ")"}]}]}], "*", 
+        RowBox[{"Sin", "[", 
+         RowBox[{"2", "*", "Pi", "*", "246.94", "*", 
+          RowBox[{"(", 
+           RowBox[{"t", "-", "4.8"}], ")"}], "*", "n"}], "]"}]}], ",", 
+       RowBox[{"{", 
+        RowBox[{"n", ",", "1", ",", "7"}], "}"}]}], "]"}]}], "+", 
+    RowBox[{
+     RowBox[{"UnitStep", "[", 
+      RowBox[{"t", "-", "5.2"}], "]"}], "*", 
+     RowBox[{"1", "/", 
+      RowBox[{"If", "[", 
+       RowBox[{
+        RowBox[{"t", ">", "5.201"}], ",", 
+        RowBox[{"t", "-", "5.2"}], ",", "1"}], "]"}]}], "*", 
+     RowBox[{"(", 
+      RowBox[{"1", "/", 
+       RowBox[{"(", 
+        RowBox[{"1", "+", 
+         RowBox[{"Exp", "[", 
+          RowBox[{
+           RowBox[{"(", 
+            RowBox[{"t", "-", "5.2"}], ")"}], "/", "2"}], "]"}]}], ")"}]}], 
+      ")"}], "*", 
+     RowBox[{"Sum", "[", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"1", "/", 
+         RowBox[{"n", "^", 
+          RowBox[{"(", 
+           RowBox[{"1", "/", "2"}], ")"}]}]}], "*", 
+        RowBox[{"Sin", "[", 
+         RowBox[{"2", "*", "Pi", "*", "369.99", "*", 
+          RowBox[{"(", 
+           RowBox[{"t", "-", "5.2"}], ")"}], "*", "n"}], "]"}]}], ",", 
+       RowBox[{"{", 
+        RowBox[{"n", ",", "1", ",", "7"}], "}"}]}], "]"}]}], "+", 
+    RowBox[{
+     RowBox[{"UnitStep", "[", 
+      RowBox[{"t", "-", "5.6"}], "]"}], "*", 
+     RowBox[{"1", "/", 
+      RowBox[{"If", "[", 
+       RowBox[{
+        RowBox[{"t", ">", "5.601"}], ",", 
+        RowBox[{"t", "-", "5.6"}], ",", "1"}], "]"}]}], "*", 
+     RowBox[{"(", 
+      RowBox[{"1", "/", 
+       RowBox[{"(", 
+        RowBox[{"1", "+", 
+         RowBox[{"Exp", "[", 
+          RowBox[{
+           RowBox[{"(", 
+            RowBox[{"t", "-", "5.6"}], ")"}], "/", "2"}], "]"}]}], ")"}]}], 
+      ")"}], "*", 
+     RowBox[{"Sum", "[", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"1", "/", 
+         RowBox[{"n", "^", 
+          RowBox[{"(", 
+           RowBox[{"1", "/", "2"}], ")"}]}]}], "*", 
+        RowBox[{"Sin", "[", 
+         RowBox[{"2", "*", "Pi", "*", "246.94", "*", 
+          RowBox[{"(", 
+           RowBox[{"t", "-", "5.6"}], ")"}], "*", "n"}], "]"}]}], ",", 
+       RowBox[{"{", 
+        RowBox[{"n", ",", "1", ",", "7"}], "}"}]}], "]"}]}], "+", 
+    RowBox[{
+     RowBox[{"UnitStep", "[", 
+      RowBox[{"t", "-", "6.0"}], "]"}], "*", 
+     RowBox[{"1", "/", 
+      RowBox[{"If", "[", 
+       RowBox[{
+        RowBox[{"t", ">", "6.001"}], ",", 
+        RowBox[{"t", "-", "6.0"}], ",", "1"}], "]"}]}], "*", 
+     RowBox[{"(", 
+      RowBox[{"1", "/", 
+       RowBox[{"(", 
+        RowBox[{"1", "+", 
+         RowBox[{"Exp", "[", 
+          RowBox[{
+           RowBox[{"(", 
+            RowBox[{"t", "-", "6.0"}], ")"}], "/", "7"}], "]"}]}], ")"}]}], 
+      ")"}], "*", 
+     RowBox[{"Sum", "[", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"1", "/", 
+         RowBox[{"n", "^", 
+          RowBox[{"(", 
+           RowBox[{"1", "/", "2"}], ")"}]}]}], "*", 
+        RowBox[{"Sin", "[", 
+         RowBox[{"2", "*", "Pi", "*", "293.66", "*", 
+          RowBox[{"(", 
+           RowBox[{"t", "-", "6.0"}], ")"}], "*", "n"}], "]"}]}], ",", 
+       RowBox[{"{", 
+        RowBox[{"n", ",", "1", ",", "7"}], "}"}]}], "]"}]}], "+", 
+    RowBox[{
+     RowBox[{"UnitStep", "[", 
+      RowBox[{"t", "-", "7.2"}], "]"}], "*", 
+     RowBox[{"1", "/", 
+      RowBox[{"If", "[", 
+       RowBox[{
+        RowBox[{"t", ">", "7.201"}], ",", 
+        RowBox[{"t", "-", "7.2"}], ",", "1"}], "]"}]}], "*", 
+     RowBox[{"(", 
+      RowBox[{"1", "/", 
+       RowBox[{"(", 
+        RowBox[{"1", "+", 
+         RowBox[{"Exp", "[", 
+          RowBox[{
+           RowBox[{"(", 
+            RowBox[{"t", "-", "7.2"}], ")"}], "/", "2"}], "]"}]}], ")"}]}], 
+      ")"}], "*", 
+     RowBox[{"Sum", "[", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"1", "/", 
+         RowBox[{"n", "^", 
+          RowBox[{"(", 
+           RowBox[{"1", "/", "2"}], ")"}]}]}], "*", 
+        RowBox[{"Sin", "[", 
+         RowBox[{"2", "*", "Pi", "*", "196.00", "*", 
+          RowBox[{"(", 
+           RowBox[{"t", "-", "7.2"}], ")"}], "*", "n"}], "]"}]}], ",", 
+       RowBox[{"{", 
+        RowBox[{"n", ",", "1", ",", "7"}], "}"}]}], "]"}]}], "+", 
+    RowBox[{
+     RowBox[{"UnitStep", "[", 
+      RowBox[{"t", "-", "7.6"}], "]"}], "*", 
+     RowBox[{"1", "/", 
+      RowBox[{"If", "[", 
+       RowBox[{
+        RowBox[{"t", ">", "7.601"}], ",", 
+        RowBox[{"t", "-", "7.6"}], ",", "1"}], "]"}]}], "*", 
+     RowBox[{"(", 
+      RowBox[{"1", "/", 
+       RowBox[{"(", 
+        RowBox[{"1", "+", 
+         RowBox[{"Exp", "[", 
+          RowBox[{
+           RowBox[{"(", 
+            RowBox[{"t", "-", "7.6"}], ")"}], "/", "2"}], "]"}]}], ")"}]}], 
+      ")"}], "*", 
+     RowBox[{"Sum", "[", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"1", "/", 
+         RowBox[{"n", "^", 
+          RowBox[{"(", 
+           RowBox[{"1", "/", "2"}], ")"}]}]}], "*", 
+        RowBox[{"Sin", "[", 
+         RowBox[{"2", "*", "Pi", "*", "369.99", "*", 
+          RowBox[{"(", 
+           RowBox[{"t", "-", "7.6"}], ")"}], "*", "n"}], "]"}]}], ",", 
+       RowBox[{"{", 
+        RowBox[{"n", ",", "1", ",", "7"}], "}"}]}], "]"}]}], "+", 
+    RowBox[{
+     RowBox[{"UnitStep", "[", 
+      RowBox[{"t", "-", "8.0"}], "]"}], "*", 
+     RowBox[{"1", "/", 
+      RowBox[{"If", "[", 
+       RowBox[{
+        RowBox[{"t", ">", "8.001"}], ",", 
+        RowBox[{"t", "-", "8.0"}], ",", "1"}], "]"}]}], "*", 
+     RowBox[{"(", 
+      RowBox[{"1", "/", 
+       RowBox[{"(", 
+        RowBox[{"1", "+", 
+         RowBox[{"Exp", "[", 
+          RowBox[{
+           RowBox[{"(", 
+            RowBox[{"t", "-", "8.0"}], ")"}], "/", "2"}], "]"}]}], ")"}]}], 
+      ")"}], "*", 
+     RowBox[{"Sum", "[", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"1", "/", 
+         RowBox[{"n", "^", 
+          RowBox[{"(", 
+           RowBox[{"1", "/", "2"}], ")"}]}]}], "*", 
+        RowBox[{"Sin", "[", 
+         RowBox[{"2", "*", "Pi", "*", "196.00", "*", 
+          RowBox[{"(", 
+           RowBox[{"t", "-", "8.0"}], ")"}], "*", "n"}], "]"}]}], ",", 
+       RowBox[{"{", 
+        RowBox[{"n", ",", "1", ",", "7"}], "}"}]}], "]"}]}], "+", 
+    RowBox[{
+     RowBox[{"UnitStep", "[", 
+      RowBox[{"t", "-", "8.4"}], "]"}], "*", 
+     RowBox[{"1", "/", 
+      RowBox[{"If", "[", 
+       RowBox[{
+        RowBox[{"t", ">", "8.401"}], ",", 
+        RowBox[{"t", "-", "8.4"}], ",", "1"}], "]"}]}], "*", 
+     RowBox[{"(", 
+      RowBox[{"1", "/", 
+       RowBox[{"(", 
+        RowBox[{"1", "+", 
+         RowBox[{"Exp", "[", 
+          RowBox[{
+           RowBox[{"(", 
+            RowBox[{"t", "-", "8.4"}], ")"}], "/", "5"}], "]"}]}], ")"}]}], 
+      ")"}], "*", 
+     RowBox[{"Sum", "[", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"1", "/", 
+         RowBox[{"n", "^", 
+          RowBox[{"(", 
+           RowBox[{"1", "/", "2"}], ")"}]}]}], "*", 
+        RowBox[{"Sin", "[", 
+         RowBox[{"2", "*", "Pi", "*", "293.66", "*", 
+          RowBox[{"(", 
+           RowBox[{"t", "-", "8.4"}], ")"}], "*", "n"}], "]"}]}], ",", 
+       RowBox[{"{", 
+        RowBox[{"n", ",", "1", ",", "7"}], "}"}]}], "]"}]}], "+", 
+    RowBox[{
+     RowBox[{"UnitStep", "[", 
+      RowBox[{"t", "-", "9.2"}], "]"}], "*", 
+     RowBox[{"1", "/", 
+      RowBox[{"If", "[", 
+       RowBox[{
+        RowBox[{"t", ">", "9.201"}], ",", 
+        RowBox[{"t", "-", "9.2"}], ",", "1"}], "]"}]}], "*", 
+     RowBox[{"(", 
+      RowBox[{"1", "/", 
+       RowBox[{"(", 
+        RowBox[{"1", "+", 
+         RowBox[{"Exp", "[", 
+          RowBox[{
+           RowBox[{"(", 
+            RowBox[{"t", "-", "9.2"}], ")"}], "/", "9"}], "]"}]}], ")"}]}], 
+      ")"}], "*", 
+     RowBox[{"Sum", "[", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"1", "/", 
+         RowBox[{"n", "^", 
+          RowBox[{"(", 
+           RowBox[{"1", "/", "2"}], ")"}]}]}], "*", 
+        RowBox[{"Sin", "[", 
+         RowBox[{"2", "*", "Pi", "*", "392.00", "*", 
+          RowBox[{"(", 
+           RowBox[{"t", "-", "9.2"}], ")"}], "*", "n"}], "]"}]}], ",", 
+       RowBox[{"{", 
+        RowBox[{"n", ",", "1", ",", "7"}], "}"}]}], "]"}]}]}], ",", 
+   RowBox[{"{", 
+    RowBox[{"t", ",", "0", ",", "10"}], "}"}], ",", 
+   RowBox[{"PlayRange", "\[Rule]", 
+    RowBox[{"{", 
+     RowBox[{"0", ",", "100"}], "}"}]}], ",", 
+   RowBox[{"SampleRate", "\[Rule]", "32000"}]}], "]"}]], "Input",
+ CellChangeTimes->CompressedData["
+1:eJwdzTtIggEABGARCUGRjN5EEhZKgokWlaaRVKQkhllDgoEiRkMFQZlUSxbS
+IOQDKUnMjMD3JC3iEEJDKpJIRNESFDUkLS0h/fcPxzcc3PWY1nUWKoVC6SIC
+m1JVe3ztc2K8TX4EXfpRN1ylZkhpCyU/PPtZDsFSVnQFWxtG43DMQhcmCE/9
+PDkUMhJT0HAhVcGRyp8G0tRWE5xO0K2QLytvwLuVyg60XSvs0L4tOYQ+UdpJ
+7gm4bhhWCTyw6BoIwuyymLTzNZiCLeJ30t7ymzJJ+JJXzEHWeW4R6pQcM+yr
+O7ZgYzFng7755n1YFXWQGjMHJ7DgdUZghJeNwvuHPGmI+fUIpdwaacTzpPwm
+/NCWZ2Dg+NkLY1q9HzInbVE4u1VPwOGAjFHDP8vIhI5ndTdksyUcuBve48PY
+72Y/vE1eamB74UYL0+bBJbKnDhngP2Df6uk=
+  "]],
+
+Cell[TextData[StyleBox["\n\nPodemos simular uma distorcao se limitarmos a \
+amplitude da onda (PlayRange -> {0, 1.5})\n", "Subsubtitle"]], "Text",
+ CellChangeTimes->{{3.547690706688461*^9, 3.547690749798029*^9}, {
+  3.5476908832194166`*^9, 3.547690891472834*^9}, {3.5476912517049723`*^9, 
+  3.547691252182991*^9}, {3.547824515149701*^9, 3.5478245156277285`*^9}, {
+  3.547825271615121*^9, 3.547825271755129*^9}}],
+
+Cell[BoxData[
+ RowBox[{"Play", "[", 
+  RowBox[{
+   RowBox[{
+    RowBox[{
+     RowBox[{"1", "/", "t"}], "*", 
+     RowBox[{"(", 
+      RowBox[{"1", "/", 
+       RowBox[{"(", 
+        RowBox[{"1", "+", 
+         RowBox[{"Exp", "[", 
+          RowBox[{"t", "/", "2"}], "]"}]}], ")"}]}], ")"}], "*", 
+     RowBox[{"Sum", "[", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"1", "/", 
+         RowBox[{"n", "^", 
+          RowBox[{"(", 
+           RowBox[{"1", "/", "2"}], ")"}]}]}], "*", 
+        RowBox[{"Sin", "[", 
+         RowBox[{"2", "*", "Pi", "*", "246.94", "*", "t", "*", "n"}], "]"}]}],
+        ",", 
+       RowBox[{"{", 
+        RowBox[{"n", ",", "1", ",", "10"}], "}"}]}], "]"}]}], "+", 
+    RowBox[{
+     RowBox[{"UnitStep", "[", 
+      RowBox[{"t", "-", "0.4"}], "]"}], "*", 
+     RowBox[{"1", "/", 
+      RowBox[{"If", "[", 
+       RowBox[{
+        RowBox[{"t", ">", "0.401"}], ",", 
+        RowBox[{"t", "-", "0.4"}], ",", "1"}], "]"}]}], "*", 
+     RowBox[{"(", 
+      RowBox[{"1", "/", 
+       RowBox[{"(", 
+        RowBox[{"1", "+", 
+         RowBox[{"Exp", "[", 
+          RowBox[{
+           RowBox[{"(", 
+            RowBox[{"t", "-", "0.4"}], ")"}], "/", "2"}], "]"}]}], ")"}]}], 
+      ")"}], "*", 
+     RowBox[{"Sum", "[", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"1", "/", 
+         RowBox[{"n", "^", 
+          RowBox[{"(", 
+           RowBox[{"1", "/", "2"}], ")"}]}]}], "*", 
+        RowBox[{"Sin", "[", 
+         RowBox[{"2", "*", "Pi", "*", "369.99", "*", 
+          RowBox[{"(", 
+           RowBox[{"t", "-", "0.4"}], ")"}], "*", "n"}], "]"}]}], ",", 
+       RowBox[{"{", 
+        RowBox[{"n", ",", "1", ",", "7"}], "}"}]}], "]"}]}], "+", 
+    RowBox[{
+     RowBox[{"UnitStep", "[", 
+      RowBox[{"t", "-", "0.8"}], "]"}], "*", 
+     RowBox[{"1", "/", 
+      RowBox[{"If", "[", 
+       RowBox[{
+        RowBox[{"t", ">", "0.801"}], ",", 
+        RowBox[{"t", "-", "0.8"}], ",", "1"}], "]"}]}], "*", 
+     RowBox[{"(", 
+      RowBox[{"1", "/", 
+       RowBox[{"(", 
+        RowBox[{"1", "+", 
+         RowBox[{"Exp", "[", 
+          RowBox[{
+           RowBox[{"(", 
+            RowBox[{"t", "-", "0.8"}], ")"}], "/", "2"}], "]"}]}], ")"}]}], 
+      ")"}], "*", 
+     RowBox[{"Sum", "[", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"1", "/", 
+         RowBox[{"n", "^", 
+          RowBox[{"(", 
+           RowBox[{"1", "/", "2"}], ")"}]}]}], "*", 
+        RowBox[{"Sin", "[", 
+         RowBox[{"2", "*", "Pi", "*", "246.94", "*", 
+          RowBox[{"(", 
+           RowBox[{"t", "-", "0.8"}], ")"}], "*", "n"}], "]"}]}], ",", 
+       RowBox[{"{", 
+        RowBox[{"n", ",", "1", ",", "7"}], "}"}]}], "]"}]}], "+", 
+    RowBox[{
+     RowBox[{"UnitStep", "[", 
+      RowBox[{"t", "-", "1.2"}], "]"}], "*", 
+     RowBox[{"1", "/", 
+      RowBox[{"If", "[", 
+       RowBox[{
+        RowBox[{"t", ">", "1.201"}], ",", 
+        RowBox[{"t", "-", "1.2"}], ",", "1"}], "]"}]}], "*", 
+     RowBox[{"(", 
+      RowBox[{"1", "/", 
+       RowBox[{"(", 
+        RowBox[{"1", "+", 
+         RowBox[{"Exp", "[", 
+          RowBox[{
+           RowBox[{"(", 
+            RowBox[{"t", "-", "1.2"}], ")"}], "/", "2"}], "]"}]}], ")"}]}], 
+      ")"}], "*", 
+     RowBox[{"Sum", "[", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"1", "/", 
+         RowBox[{"n", "^", 
+          RowBox[{"(", 
+           RowBox[{"1", "/", "2"}], ")"}]}]}], "*", 
+        RowBox[{"Sin", "[", 
+         RowBox[{"2", "*", "Pi", "*", "293.66", "*", 
+          RowBox[{"(", 
+           RowBox[{"t", "-", "1.2"}], ")"}], "*", "n"}], "]"}]}], ",", 
+       RowBox[{"{", 
+        RowBox[{"n", ",", "1", ",", "7"}], "}"}]}], "]"}]}], "+", 
+    RowBox[{
+     RowBox[{"UnitStep", "[", 
+      RowBox[{"t", "-", "2.4"}], "]"}], "*", 
+     RowBox[{"1", "/", 
+      RowBox[{"If", "[", 
+       RowBox[{
+        RowBox[{"t", ">", "2.401"}], ",", 
+        RowBox[{"t", "-", "2.4"}], ",", "1"}], "]"}]}], "*", 
+     RowBox[{"(", 
+      RowBox[{"1", "/", 
+       RowBox[{"(", 
+        RowBox[{"1", "+", 
+         RowBox[{"Exp", "[", 
+          RowBox[{
+           RowBox[{"(", 
+            RowBox[{"t", "-", "2.4"}], ")"}], "/", "2"}], "]"}]}], ")"}]}], 
+      ")"}], "*", 
+     RowBox[{"Sum", "[", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"1", "/", 
+         RowBox[{"n", "^", 
+          RowBox[{"(", 
+           RowBox[{"1", "/", "2"}], ")"}]}]}], "*", 
+        RowBox[{"Sin", "[", 
+         RowBox[{"2", "*", "Pi", "*", "196.00", "*", 
+          RowBox[{"(", 
+           RowBox[{"t", "-", "2.4"}], ")"}], "*", "n"}], "]"}]}], ",", 
+       RowBox[{"{", 
+        RowBox[{"n", ",", "1", ",", "7"}], "}"}]}], "]"}]}], "+", 
+    RowBox[{
+     RowBox[{"UnitStep", "[", 
+      RowBox[{"t", "-", "2.8"}], "]"}], "*", 
+     RowBox[{"1", "/", 
+      RowBox[{"If", "[", 
+       RowBox[{
+        RowBox[{"t", ">", "2.801"}], ",", 
+        RowBox[{"t", "-", "2.8"}], ",", "1"}], "]"}]}], "*", 
+     RowBox[{"(", 
+      RowBox[{"1", "/", 
+       RowBox[{"(", 
+        RowBox[{"1", "+", 
+         RowBox[{"Exp", "[", 
+          RowBox[{
+           RowBox[{"(", 
+            RowBox[{"t", "-", "2.8"}], ")"}], "/", "2"}], "]"}]}], ")"}]}], 
+      ")"}], "*", 
+     RowBox[{"Sum", "[", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"1", "/", 
+         RowBox[{"n", "^", 
+          RowBox[{"(", 
+           RowBox[{"1", "/", "2"}], ")"}]}]}], "*", 
+        RowBox[{"Sin", "[", 
+         RowBox[{"2", "*", "Pi", "*", "369.99", "*", 
+          RowBox[{"(", 
+           RowBox[{"t", "-", "2.8"}], ")"}], "*", "n"}], "]"}]}], ",", 
+       RowBox[{"{", 
+        RowBox[{"n", ",", "1", ",", "7"}], "}"}]}], "]"}]}], "+", 
+    RowBox[{
+     RowBox[{"UnitStep", "[", 
+      RowBox[{"t", "-", "3.2"}], "]"}], "*", 
+     RowBox[{"1", "/", 
+      RowBox[{"If", "[", 
+       RowBox[{
+        RowBox[{"t", ">", "3.201"}], ",", 
+        RowBox[{"t", "-", "3.2"}], ",", "1"}], "]"}]}], "*", 
+     RowBox[{"(", 
+      RowBox[{"1", "/", 
+       RowBox[{"(", 
+        RowBox[{"1", "+", 
+         RowBox[{"Exp", "[", 
+          RowBox[{
+           RowBox[{"(", 
+            RowBox[{"t", "-", "3.2"}], ")"}], "/", "2"}], "]"}]}], ")"}]}], 
+      ")"}], "*", 
+     RowBox[{"Sum", "[", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"1", "/", 
+         RowBox[{"n", "^", 
+          RowBox[{"(", 
+           RowBox[{"1", "/", "2"}], ")"}]}]}], "*", 
+        RowBox[{"Sin", "[", 
+         RowBox[{"2", "*", "Pi", "*", "196.00", "*", 
+          RowBox[{"(", 
+           RowBox[{"t", "-", "3.2"}], ")"}], "*", "n"}], "]"}]}], ",", 
+       RowBox[{"{", 
+        RowBox[{"n", ",", "1", ",", "7"}], "}"}]}], "]"}]}], "+", 
+    RowBox[{
+     RowBox[{"UnitStep", "[", 
+      RowBox[{"t", "-", "3.6"}], "]"}], "*", 
+     RowBox[{"1", "/", 
+      RowBox[{"If", "[", 
+       RowBox[{
+        RowBox[{"t", ">", "3.601"}], ",", 
+        RowBox[{"t", "-", "3.6"}], ",", "1"}], "]"}]}], "*", 
+     RowBox[{"(", 
+      RowBox[{"1", "/", 
+       RowBox[{"(", 
+        RowBox[{"1", "+", 
+         RowBox[{"Exp", "[", 
+          RowBox[{
+           RowBox[{"(", 
+            RowBox[{"t", "-", "3.6"}], ")"}], "/", "2"}], "]"}]}], ")"}]}], 
+      ")"}], "*", 
+     RowBox[{"Sum", "[", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"1", "/", 
+         RowBox[{"n", "^", 
+          RowBox[{"(", 
+           RowBox[{"1", "/", "2"}], ")"}]}]}], "*", 
+        RowBox[{"Sin", "[", 
+         RowBox[{"2", "*", "Pi", "*", "293.66", "*", 
+          RowBox[{"(", 
+           RowBox[{"t", "-", "3.6"}], ")"}], "*", "n"}], "]"}]}], ",", 
+       RowBox[{"{", 
+        RowBox[{"n", ",", "1", ",", "7"}], "}"}]}], "]"}]}], "+", 
+    RowBox[{
+     RowBox[{"UnitStep", "[", 
+      RowBox[{"t", "-", "4.8"}], "]"}], "*", 
+     RowBox[{"1", "/", 
+      RowBox[{"If", "[", 
+       RowBox[{
+        RowBox[{"t", ">", "4.801"}], ",", 
+        RowBox[{"t", "-", "4.8"}], ",", "1"}], "]"}]}], "*", 
+     RowBox[{"(", 
+      RowBox[{"1", "/", 
+       RowBox[{"(", 
+        RowBox[{"1", "+", 
+         RowBox[{"Exp", "[", 
+          RowBox[{
+           RowBox[{"(", 
+            RowBox[{"t", "-", "4.8"}], ")"}], "/", "2"}], "]"}]}], ")"}]}], 
+      ")"}], "*", 
+     RowBox[{"Sum", "[", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"1", "/", 
+         RowBox[{"n", "^", 
+          RowBox[{"(", 
+           RowBox[{"1", "/", "2"}], ")"}]}]}], "*", 
+        RowBox[{"Sin", "[", 
+         RowBox[{"2", "*", "Pi", "*", "246.94", "*", 
+          RowBox[{"(", 
+           RowBox[{"t", "-", "4.8"}], ")"}], "*", "n"}], "]"}]}], ",", 
+       RowBox[{"{", 
+        RowBox[{"n", ",", "1", ",", "7"}], "}"}]}], "]"}]}], "+", 
+    RowBox[{
+     RowBox[{"UnitStep", "[", 
+      RowBox[{"t", "-", "5.2"}], "]"}], "*", 
+     RowBox[{"1", "/", 
+      RowBox[{"If", "[", 
+       RowBox[{
+        RowBox[{"t", ">", "5.201"}], ",", 
+        RowBox[{"t", "-", "5.2"}], ",", "1"}], "]"}]}], "*", 
+     RowBox[{"(", 
+      RowBox[{"1", "/", 
+       RowBox[{"(", 
+        RowBox[{"1", "+", 
+         RowBox[{"Exp", "[", 
+          RowBox[{
+           RowBox[{"(", 
+            RowBox[{"t", "-", "5.2"}], ")"}], "/", "2"}], "]"}]}], ")"}]}], 
+      ")"}], "*", 
+     RowBox[{"Sum", "[", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"1", "/", 
+         RowBox[{"n", "^", 
+          RowBox[{"(", 
+           RowBox[{"1", "/", "2"}], ")"}]}]}], "*", 
+        RowBox[{"Sin", "[", 
+         RowBox[{"2", "*", "Pi", "*", "369.99", "*", 
+          RowBox[{"(", 
+           RowBox[{"t", "-", "5.2"}], ")"}], "*", "n"}], "]"}]}], ",", 
+       RowBox[{"{", 
+        RowBox[{"n", ",", "1", ",", "7"}], "}"}]}], "]"}]}], "+", 
+    RowBox[{
+     RowBox[{"UnitStep", "[", 
+      RowBox[{"t", "-", "5.6"}], "]"}], "*", 
+     RowBox[{"1", "/", 
+      RowBox[{"If", "[", 
+       RowBox[{
+        RowBox[{"t", ">", "5.601"}], ",", 
+        RowBox[{"t", "-", "5.6"}], ",", "1"}], "]"}]}], "*", 
+     RowBox[{"(", 
+      RowBox[{"1", "/", 
+       RowBox[{"(", 
+        RowBox[{"1", "+", 
+         RowBox[{"Exp", "[", 
+          RowBox[{
+           RowBox[{"(", 
+            RowBox[{"t", "-", "5.6"}], ")"}], "/", "2"}], "]"}]}], ")"}]}], 
+      ")"}], "*", 
+     RowBox[{"Sum", "[", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"1", "/", 
+         RowBox[{"n", "^", 
+          RowBox[{"(", 
+           RowBox[{"1", "/", "2"}], ")"}]}]}], "*", 
+        RowBox[{"Sin", "[", 
+         RowBox[{"2", "*", "Pi", "*", "246.94", "*", 
+          RowBox[{"(", 
+           RowBox[{"t", "-", "5.6"}], ")"}], "*", "n"}], "]"}]}], ",", 
+       RowBox[{"{", 
+        RowBox[{"n", ",", "1", ",", "7"}], "}"}]}], "]"}]}], "+", 
+    RowBox[{
+     RowBox[{"UnitStep", "[", 
+      RowBox[{"t", "-", "6.0"}], "]"}], "*", 
+     RowBox[{"1", "/", 
+      RowBox[{"If", "[", 
+       RowBox[{
+        RowBox[{"t", ">", "6.001"}], ",", 
+        RowBox[{"t", "-", "6.0"}], ",", "1"}], "]"}]}], "*", 
+     RowBox[{"(", 
+      RowBox[{"1", "/", 
+       RowBox[{"(", 
+        RowBox[{"1", "+", 
+         RowBox[{"Exp", "[", 
+          RowBox[{
+           RowBox[{"(", 
+            RowBox[{"t", "-", "6.0"}], ")"}], "/", "2"}], "]"}]}], ")"}]}], 
+      ")"}], "*", 
+     RowBox[{"Sum", "[", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"1", "/", 
+         RowBox[{"n", "^", 
+          RowBox[{"(", 
+           RowBox[{"1", "/", "2"}], ")"}]}]}], "*", 
+        RowBox[{"Sin", "[", 
+         RowBox[{"2", "*", "Pi", "*", "293.66", "*", 
+          RowBox[{"(", 
+           RowBox[{"t", "-", "6.0"}], ")"}], "*", "n"}], "]"}]}], ",", 
+       RowBox[{"{", 
+        RowBox[{"n", ",", "1", ",", "7"}], "}"}]}], "]"}]}], "+", 
+    RowBox[{
+     RowBox[{"UnitStep", "[", 
+      RowBox[{"t", "-", "7.2"}], "]"}], "*", 
+     RowBox[{"1", "/", 
+      RowBox[{"If", "[", 
+       RowBox[{
+        RowBox[{"t", ">", "7.201"}], ",", 
+        RowBox[{"t", "-", "7.2"}], ",", "1"}], "]"}]}], "*", 
+     RowBox[{"(", 
+      RowBox[{"1", "/", 
+       RowBox[{"(", 
+        RowBox[{"1", "+", 
+         RowBox[{"Exp", "[", 
+          RowBox[{
+           RowBox[{"(", 
+            RowBox[{"t", "-", "7.2"}], ")"}], "/", "2"}], "]"}]}], ")"}]}], 
+      ")"}], "*", 
+     RowBox[{"Sum", "[", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"1", "/", 
+         RowBox[{"n", "^", 
+          RowBox[{"(", 
+           RowBox[{"1", "/", "2"}], ")"}]}]}], "*", 
+        RowBox[{"Sin", "[", 
+         RowBox[{"2", "*", "Pi", "*", "196.00", "*", 
+          RowBox[{"(", 
+           RowBox[{"t", "-", "7.2"}], ")"}], "*", "n"}], "]"}]}], ",", 
+       RowBox[{"{", 
+        RowBox[{"n", ",", "1", ",", "7"}], "}"}]}], "]"}]}], "+", 
+    RowBox[{
+     RowBox[{"UnitStep", "[", 
+      RowBox[{"t", "-", "7.6"}], "]"}], "*", 
+     RowBox[{"1", "/", 
+      RowBox[{"If", "[", 
+       RowBox[{
+        RowBox[{"t", ">", "7.601"}], ",", 
+        RowBox[{"t", "-", "7.6"}], ",", "1"}], "]"}]}], "*", 
+     RowBox[{"(", 
+      RowBox[{"1", "/", 
+       RowBox[{"(", 
+        RowBox[{"1", "+", 
+         RowBox[{"Exp", "[", 
+          RowBox[{
+           RowBox[{"(", 
+            RowBox[{"t", "-", "7.6"}], ")"}], "/", "2"}], "]"}]}], ")"}]}], 
+      ")"}], "*", 
+     RowBox[{"Sum", "[", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"1", "/", 
+         RowBox[{"n", "^", 
+          RowBox[{"(", 
+           RowBox[{"1", "/", "2"}], ")"}]}]}], "*", 
+        RowBox[{"Sin", "[", 
+         RowBox[{"2", "*", "Pi", "*", "369.99", "*", 
+          RowBox[{"(", 
+           RowBox[{"t", "-", "7.6"}], ")"}], "*", "n"}], "]"}]}], ",", 
+       RowBox[{"{", 
+        RowBox[{"n", ",", "1", ",", "7"}], "}"}]}], "]"}]}], "+", 
+    RowBox[{
+     RowBox[{"UnitStep", "[", 
+      RowBox[{"t", "-", "8.0"}], "]"}], "*", 
+     RowBox[{"1", "/", 
+      RowBox[{"If", "[", 
+       RowBox[{
+        RowBox[{"t", ">", "8.001"}], ",", 
+        RowBox[{"t", "-", "8.0"}], ",", "1"}], "]"}]}], "*", 
+     RowBox[{"(", 
+      RowBox[{"1", "/", 
+       RowBox[{"(", 
+        RowBox[{"1", "+", 
+         RowBox[{"Exp", "[", 
+          RowBox[{
+           RowBox[{"(", 
+            RowBox[{"t", "-", "8.0"}], ")"}], "/", "2"}], "]"}]}], ")"}]}], 
+      ")"}], "*", 
+     RowBox[{"Sum", "[", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"1", "/", 
+         RowBox[{"n", "^", 
+          RowBox[{"(", 
+           RowBox[{"1", "/", "2"}], ")"}]}]}], "*", 
+        RowBox[{"Sin", "[", 
+         RowBox[{"2", "*", "Pi", "*", "196.00", "*", 
+          RowBox[{"(", 
+           RowBox[{"t", "-", "8.0"}], ")"}], "*", "n"}], "]"}]}], ",", 
+       RowBox[{"{", 
+        RowBox[{"n", ",", "1", ",", "7"}], "}"}]}], "]"}]}], "+", 
+    RowBox[{
+     RowBox[{"UnitStep", "[", 
+      RowBox[{"t", "-", "8.4"}], "]"}], "*", 
+     RowBox[{"1", "/", 
+      RowBox[{"If", "[", 
+       RowBox[{
+        RowBox[{"t", ">", "8.401"}], ",", 
+        RowBox[{"t", "-", "8.4"}], ",", "1"}], "]"}]}], "*", 
+     RowBox[{"(", 
+      RowBox[{"1", "/", 
+       RowBox[{"(", 
+        RowBox[{"1", "+", 
+         RowBox[{"Exp", "[", 
+          RowBox[{
+           RowBox[{"(", 
+            RowBox[{"t", "-", "8.4"}], ")"}], "/", "2"}], "]"}]}], ")"}]}], 
+      ")"}], "*", 
+     RowBox[{"Sum", "[", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"1", "/", 
+         RowBox[{"n", "^", 
+          RowBox[{"(", 
+           RowBox[{"1", "/", "2"}], ")"}]}]}], "*", 
+        RowBox[{"Sin", "[", 
+         RowBox[{"2", "*", "Pi", "*", "293.66", "*", 
+          RowBox[{"(", 
+           RowBox[{"t", "-", "8.4"}], ")"}], "*", "n"}], "]"}]}], ",", 
+       RowBox[{"{", 
+        RowBox[{"n", ",", "1", ",", "7"}], "}"}]}], "]"}]}], "+", 
+    RowBox[{
+     RowBox[{"UnitStep", "[", 
+      RowBox[{"t", "-", "9.2"}], "]"}], "*", 
+     RowBox[{"1", "/", 
+      RowBox[{"If", "[", 
+       RowBox[{
+        RowBox[{"t", ">", "9.201"}], ",", 
+        RowBox[{"t", "-", "9.2"}], ",", "1"}], "]"}]}], "*", 
+     RowBox[{"(", 
+      RowBox[{"1", "/", 
+       RowBox[{"(", 
+        RowBox[{"1", "+", 
+         RowBox[{"Exp", "[", 
+          RowBox[{
+           RowBox[{"(", 
+            RowBox[{"t", "-", "9.2"}], ")"}], "/", "9"}], "]"}]}], ")"}]}], 
+      ")"}], "*", 
+     RowBox[{"Sum", "[", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"1", "/", 
+         RowBox[{"n", "^", 
+          RowBox[{"(", 
+           RowBox[{"1", "/", "2"}], ")"}]}]}], "*", 
+        RowBox[{"Sin", "[", 
+         RowBox[{"2", "*", "Pi", "*", "392.00", "*", 
+          RowBox[{"(", 
+           RowBox[{"t", "-", "9.2"}], ")"}], "*", "n"}], "]"}]}], ",", 
+       RowBox[{"{", 
+        RowBox[{"n", ",", "1", ",", "7"}], "}"}]}], "]"}]}]}], ",", 
+   RowBox[{"{", 
+    RowBox[{"t", ",", "0", ",", "10"}], "}"}], ",", 
+   RowBox[{"PlayRange", "\[Rule]", 
+    RowBox[{"{", 
+     RowBox[{"0", ",", "1.5"}], "}"}]}], ",", 
+   RowBox[{"SampleRate", "\[Rule]", "32000"}]}], "]"}]], "Input",
+ CellChangeTimes->{{3.5476907468481183`*^9, 3.5476907474441404`*^9}, {
+   3.5476909095165553`*^9, 3.54769090994958*^9}, {3.5478234920797596`*^9, 
+   3.5478234988299*^9}, {3.5478239297992764`*^9, 3.547823929948285*^9}, 
+   3.5478248937014213`*^9, {3.547825150296713*^9, 3.5478251546023207`*^9}, {
+   3.547825263608911*^9, 3.547825263759918*^9}}]
+}, Open  ]]
+},
+WindowSize->{1350, 633},
+WindowMargins->{{0, Automatic}, {Automatic, 0}},
+FrontEndVersion->"8.0 for Microsoft Windows (64-bit) (February 23, 2011)",
+StyleDefinitions->"Default.nb"
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[557, 20, 310, 4, 41, "Text"],
+Cell[870, 26, 182, 2, 32, "Text"],
+Cell[1055, 30, 100, 1, 29, "Text"],
+Cell[1158, 33, 603, 16, 92, "Input"],
+Cell[1764, 51, 228, 5, 52, "Input"],
+Cell[CellGroupData[{
+Cell[2017, 60, 812, 17, 161, "Subsubtitle"],
+Cell[2832, 79, 17106, 519, 372, "Input"],
+Cell[19941, 600, 411, 5, 95, "Text"],
+Cell[20355, 607, 16944, 514, 372, "Input"]
+}, Open  ]]
+}
+]
+*)
+
+(* End of internal cache information *)
